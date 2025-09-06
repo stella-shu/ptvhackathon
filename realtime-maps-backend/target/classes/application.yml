@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: realtime-maps-backend
+
+  datasource:
+    url: jdbc:h2:mem:inspectordb;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password   # if you prefer blank, keep it blank here and in the console login
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    hibernate:
+      ddl-auto: update     # use create-drop if you intentionally want a fresh DB each run
+    open-in-view: false
+    show-sql: true
+
+server:
+  port: 8080
+
+logging:
+  level:
+    com.myki.inspector: DEBUG
+
+# Only needed if you call Google APIs from the backend (server-side geocoding, etc.)
+google:
+  maps:
+    api-key: ${GOOGLE_MAPS_API_KEY:your-api-key-here}
