@@ -329,9 +329,128 @@
 
     // Icons
     const Icons = {
-      incident:{ url:'data:image/svg+xml;utf8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#ff7b8a"/><stop offset="1" stop-color="#ffb4d3"/></linearGradient></defs><g><circle cx="32" cy="32" r="16" fill="url(#g)"/><path d="M32 12c10 0 18 8 18 18s-11 22-18 28c-7-6-18-18-18-28s8-18 18-18z" fill="url(#g)" opacity=".6"/><path d="M30 22h4v14h-4zM30 40h4v4h-4z" fill="#2b1020"/></g></svg>`), scaledSize:{width:40,height:40}, anchor:{x:20,y:36}},
-      help:{ url:'data:image/svg+xml;utf8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><defs><linearGradient id="h" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#7e8ce0"/><stop offset="1" stop-color="#b9bdf6"/></linearGradient></defs><g><circle cx="32" cy="32" r="16" fill="url(#h)"/><path d="M32 12c10 0 18 8 18 18s-11 22-18 28c-7-6-18-18-18-28s8-18 18-18z" fill="url(#h)" opacity=".6"/><text x="32" y="38" text-anchor="middle" font-size="22" font-family="Arial" fill="#0f1222">?</text></g></svg>`), scaledSize:{width:40,height:40}, anchor:{x:20,y:36}},
-      patrol:{ url:'data:image/svg+xml;utf8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><defs><linearGradient id="p" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#7be0a6"/><stop offset="1" stop-color="#c8f6de"/></linearGradient></defs><g><circle cx="32" cy="32" r="16" fill="url(#p)"/><path d="M22 38l8-12 8 12" stroke="#0f2b1f" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g></svg>`), scaledSize:{width:32,height:32}, anchor:{x:16,y:28}},
+      // 🚨 Incident (alert / report)
+      incident:{ url:'data:image/svg+xml;utf8,'+encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+          <defs><linearGradient id="g1" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#ff7b8a"/><stop offset="1" stop-color="#ffb4d3"/></linearGradient></defs>
+          <g>
+            <circle cx="32" cy="32" r="16" fill="url(#g1)"/>
+            <path d="M32 12c10 0 18 8 18 18s-11 22-18 28c-7-6-18-18-18-28s8-18 18-18z" fill="url(#g1)" opacity=".6"/>
+            <path d="M30 22h4v14h-4zM30 40h4v4h-4z" fill="#2b1020"/>
+          </g>
+        </svg>`), scaledSize:{width:40,height:40}, anchor:{x:20,y:36} },
+
+      // 🆘 Help (request backup)
+      help:{ url:'data:image/svg+xml;utf8,'+encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+          <defs><linearGradient id="g2" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#7e8ce0"/><stop offset="1" stop-color="#b9bdf6"/></linearGradient></defs>
+          <g>
+            <circle cx="32" cy="32" r="16" fill="url(#g2)"/>
+            <path d="M32 12c10 0 18 8 18 18s-11 22-18 28c-7-6-18-18-18-28s8-18 18-18z" fill="url(#g2)" opacity=".6"/>
+            <text x="32" y="38" text-anchor="middle" font-size="22" font-family="Arial" fill="#0f1222">?</text>
+          </g>
+        </svg>`), scaledSize:{width:40,height:40}, anchor:{x:20,y:36} },
+
+      // 🧭 Patrol (HQ/position)
+      patrol:{ url:'data:image/svg+xml;utf8,'+encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+          <defs><linearGradient id="g3" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#7be0a6"/><stop offset="1" stop-color="#c8f6de"/></linearGradient></defs>
+          <g>
+            <circle cx="32" cy="32" r="16" fill="url(#g3)"/>
+            <path d="M22 38l8-12 8 12" stroke="#0f2b1f" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+        </svg>`), scaledSize:{width:32,height:32}, anchor:{x:16,y:28} },
+
+      // 💸 Fine issued
+      fine:{ url:'data:image/svg+xml;utf8,'+encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+          <defs><linearGradient id="g4" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#ffd36e"/><stop offset="1" stop-color="#ffe7a8"/></linearGradient></defs>
+          <g>
+            <circle cx="32" cy="32" r="16" fill="url(#g4)"/>
+            <path d="M22 30h20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H22a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2z" fill="#3a2b00"/>
+            <circle cx="28" cy="35" r="2.5" fill="#ffd36e"/>
+            <circle cx="36" cy="37" r="2.5" fill="#ffd36e"/>
+            <circle cx="22" cy="34" r="4" fill="#ffd36e"/>
+          </g>
+        </svg>`), scaledSize:{width:40,height:40}, anchor:{x:20,y:36} },
+
+      // 🪧 Checkpoint / Blitz
+      checkpoint:{ url:'data:image/svg+xml;utf8,'+encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+          <defs><linearGradient id="g5" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#7e8ce0"/><stop offset="1" stop-color="#ffb4d3"/></linearGradient></defs>
+          <g>
+            <circle cx="32" cy="32" r="16" fill="url(#g5)"/>
+            <path d="M26 22v20M26 22h12l-4 6 4 6H26" stroke="#0f1222" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+        </svg>`), scaledSize:{width:40,height:40}, anchor:{x:20,y:36} },
+
+      // ⚠️ Hazard (gate broken, spill, etc.)
+      hazard:{ url:'data:image/svg+xml;utf8,'+encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+          <defs><linearGradient id="g6" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#ff7b8a"/><stop offset="1" stop-color="#ffd36e"/></linearGradient></defs>
+          <g>
+            <circle cx="32" cy="32" r="16" fill="url(#g6)"/>
+            <path d="M32 22l10 18H22l10-18z" fill="#0f1222"/>
+            <rect x="30" y="28" width="4" height="7" fill="#ffd36e"/>
+            <rect x="30" y="37" width="4" height="4" fill="#ffd36e"/>
+          </g>
+        </svg>`), scaledSize:{width:40,height:40}, anchor:{x:20,y:36} },
+
+      // 🎥 Camera / CCTV
+      camera:{ url:'data:image/svg+xml;utf8,'+encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+          <defs><linearGradient id="g7" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#7be0a6"/><stop offset="1" stop-color="#7e8ce0"/></linearGradient></defs>
+          <g>
+            <circle cx="32" cy="32" r="16" fill="url(#g7)"/>
+            <rect x="22" y="28" width="20" height="12" rx="3" fill="#0f1222"/>
+            <circle cx="32" cy="34" r="4" fill="#7be0a6"/>
+            <rect x="40" y="31" width="6" height="6" fill="#0f1222"/>
+          </g>
+        </svg>`), scaledSize:{width:40,height:40}, anchor:{x:20,y:36} },
+
+      // 👥 Crowd / Congestion
+      crowd:{ url:'data:image/svg+xml;utf8,'+encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+          <defs><linearGradient id="g8" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#ffb4d3"/><stop offset="1" stop-color="#7e8ce0"/></linearGradient></defs>
+        <g>
+          <circle cx="32" cy="32" r="16" fill="url(#g8)"/>
+          <circle cx="28" cy="34" r="4" fill="#0f1222"/>
+          <circle cx="36" cy="34" r="4" fill="#0f1222"/>
+          <rect x="24" y="38" width="16" height="6" rx="3" fill="#0f1222"/>
+        </g>
+        </svg>`), scaledSize:{width:40,height:40}, anchor:{x:20,y:36} },
+
+      // 🏠 Base / Depot / Station office
+      base:{ url:'data:image/svg+xml;utf8,'+encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+          <defs><linearGradient id="g9" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#7e8ce0"/><stop offset="1" stop-color="#7be0a6"/></linearGradient></defs>
+          <g>
+            <circle cx="32" cy="32" r="16" fill="url(#g9)"/>
+            <path d="M22 34l10-8 10 8v8H22z" fill="#0f1222"/>
+            <rect x="30" y="36" width="4" height="6" fill="#7be0a6"/>
+          </g>
+        </svg>`), scaledSize:{width:40,height:40}, anchor:{x:20,y:36} },
+
+      // ℹ️ Info / Note
+      info:{ url:'data:image/svg+xml;utf8,'+encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+          <defs><linearGradient id="g10" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#b9bdf6"/><stop offset="1" stop-color="#7e8ce0"/></linearGradient></defs>
+          <g>
+            <circle cx="32" cy="32" r="16" fill="url(#g10)"/>
+            <circle cx="32" cy="24" r="2.5" fill="#0f1222"/>
+            <rect x="30" y="28" width="4" height="12" rx="1" fill="#0f1222"/>
+          </g>
+        </svg>`), scaledSize:{width:40,height:40}, anchor:{x:20,y:36} },
+
+      // 🔥 Hotspot marker (manual pin)
+      hotspot:{ url:'data:image/svg+xml;utf8,'+encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+          <defs><linearGradient id="g11" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#ff7b8a"/><stop offset="1" stop-color="#ffd36e"/></linearGradient></defs>
+          <g>
+            <circle cx="32" cy="32" r="16" fill="url(#g11)"/>
+            <path d="M32 20c5 5 2 8 0 10-1.8 1.8-2 3.2-2 4.5 0 3 2 5.5 4 5.5s4-2.5 4-5.5c0-2.5-1.2-4.3-3-6.5-1-1.3-2.2-2.7-3-4z" fill="#2b1020"/>
+          </g>
+        </svg>`), scaledSize:{width:40,height:40}, anchor:{x:20,y:36} },
     };
 
     // Settings
@@ -486,3 +605,4 @@
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=visualization&callback=__fareguardInit"></script>
 </body>
 </html>
+
