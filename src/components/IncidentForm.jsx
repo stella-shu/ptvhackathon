@@ -18,19 +18,28 @@ export default function IncidentForm() {
     }
   }, [showIncidentForm]);
 
-  const onSubmit = (data) => {
-    const payload = {
-      ...data,
-      createdAt: new Date().toISOString(),
-      location: coords,
-    };
-    // offline-first: queue locally (mock)
-    addIncident(payload);
-    reset(); 
-    setShowIncidentForm(false);
-    // tiny celebration
-    setTimeout(() => alert("Incident logged 🎉"), 50);
+  const onSubmit = async (data) => {
+  const photoFile = data.photo?.[0] || null;
+  const photoPreview = photoFile ? URL.createObjectURL(photoFile) : null;
+
+  const payload = {
+    ...data,
+    createdAt: new Date().toISOString(),
+    location: coords,
+    photoPreview,
   };
+
+  addIncident(payload);
+
+  if (!navigator.onLine) {
+    // queue for later sync
+    useAppStore.getState().enqueue({ type: "incident", payload });
+  }
+
+  reset();
+  setShowIncidentForm(false);
+  setTimeout(() => alert("Incident logged 🎉"), 50);
+};
 
   if (!showIncidentForm) return null;
 

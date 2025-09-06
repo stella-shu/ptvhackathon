@@ -7,7 +7,6 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.svg"],
       manifest: {
         name: "Inspector Ops",
         short_name: "InspectorOps",
@@ -15,7 +14,7 @@ export default defineConfig({
         display: "standalone",
         background_color: "#ffffff",
         theme_color: "#2563eb",
-        icons: [],
+        icons: [], // add later
       },
       workbox: { globPatterns: ["**/*.{js,css,html,svg,png}"] },
     }),
