@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    container_name: inspector-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: inspector
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - inspector_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d inspector"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  inspector_pg_data: {}
+
