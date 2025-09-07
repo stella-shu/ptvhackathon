@@ -1,3 +1,52 @@
+# Inspector Ops — Frontend
+
+## Quick Start
+
+- Install deps: `npm ci`
+- Dev server: `npm run dev`
+- Build: `npm run build`
+- Preview build: `npm run preview`
+
+If your environment blocks IPv6/::1 binding, use:
+
+`npm run dev -- --host 127.0.0.1 --port 5174`
+
+## Google Maps API Key
+
+Create `.env.local` and set:
+
+`VITE_GOOGLE_MAPS_API_KEY=your_key_here`
+
+Without a valid key, the map will not load and a loading notice will remain on screen.
+
+## Backend API (optional)
+
+If you want to sync incidents and shift events to the backend, set:
+
+`VITE_API_BASE_URL=https://your-backend-host`
+
+Queued items (incidents, shift start/end) will be POSTed to:
+- `/api/incidents`
+- `/api/shifts` (create on start)
+- `/api/shifts/{id}` (update on end)
+
+If the base URL is missing or requests fail, items remain in the offline queue and will retry when you go online.
+
+### Dev proxy to avoid CORS
+
+Instead of setting a base URL, you can rely on Vite’s dev proxy. Set the backend URL in `VITE_API_BASE_URL` and start the dev server; Vite will proxy `/api/*` to that URL. Requests in the browser stay on the same origin and avoid CORS.
+
+WebSockets are also proxied: the dev server forwards `/ws` to the backend and upgrades to WebSocket.
+
+## PWA Build
+
+The PWA layer is disabled by default during builds to avoid CI/sandbox issues.
+To enable PWA generation, run:
+
+`BUILD_PWA=true npm run build`
+
+---
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

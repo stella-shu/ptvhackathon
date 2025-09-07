@@ -1,4 +1,5 @@
 import { useAppStore } from "../store/useAppStore";
+import { createBlitz } from "../lib/api";
 
 export default function QuickActions() {
   const {
@@ -20,7 +21,16 @@ export default function QuickActions() {
 
       <button
         className="bg-green-600 text-white px-4 py-2 rounded-full shadow"
-        onClick={() => addPin({ type: "blitz", lat: -37.8136, lng: 144.9631 })}
+        onClick={async () => {
+          const lat = -37.8136, lng = 144.9631;
+          addPin({ type: "blitz", lat, lng });
+          try {
+            await createBlitz({ latitude: lat, longitude: lng, description: "Quick blitz" });
+          } catch {
+            // offline or server error: queue for later sync
+            useAppStore.getState().enqueue({ type: "blitzCreate", payload: { lat, lng, description: "Quick blitz" } });
+          }
+        }}
       >
         Mark Blitz
       </button>

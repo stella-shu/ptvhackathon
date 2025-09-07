@@ -19,27 +19,29 @@ export default function IncidentForm() {
   }, [showIncidentForm]);
 
   const onSubmit = async (data) => {
-  const photoFile = data.photo?.[0] || null;
-  const photoPreview = photoFile ? URL.createObjectURL(photoFile) : null;
+    const photoFile = data.photo?.[0] || null;
+    // keep payload small for queue; skip embedding blob URL
+    const payload = {
+      ...data,
+      createdAt: new Date().toISOString(),
+      location: coords,
+      hasPhoto: Boolean(photoFile),
+    };
 
-  const payload = {
-    ...data,
-    createdAt: new Date().toISOString(),
-    location: coords,
-    photoPreview,
-  };
+    addIncident(payload);
 
-  addIncident(payload);
-
-  if (!navigator.onLine) {
-    // queue for later sync
+    // always enqueue; will send immediately if online and authed via flush
     useAppStore.getState().enqueue({ type: "incident", payload });
-  }
 
-  reset();
-  setShowIncidentForm(false);
-  setTimeout(() => alert("Incident logged 🎉"), 50);
-};
+    // Clean up any temporary object URLs if created
+    try {
+      // no preview URL created; nothing to revoke
+    } catch {}
+
+    reset();
+    setShowIncidentForm(false);
+    setTimeout(() => alert("Incident logged 🎉"), 50);
+  };
 
   if (!showIncidentForm) return null;
 
