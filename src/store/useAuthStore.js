@@ -1,10 +1,30 @@
 import { create } from "zustand";
 
 const base = import.meta.env.VITE_API_BASE_URL;
+const NEW_KEY = "inspector_auth";
+const OLD_KEY = "auth";
+
+function buildUrl(path) {
+  const p = path.startsWith("/") ? path : `/${path}`;
+  if (!base) return p; // rely on Vite dev proxy when base not set
+  return base.replace(/\/$/, "") + p;
+}
 
 function loadPersisted() {
   try {
-    const raw = localStorage.getItem("auth");
+    let raw = localStorage.getItem(NEW_KEY);
+    if (!raw) {
+      // migrate from old generic key if present
+      const legacy = localStorage.getItem(OLD_KEY);
+      if (legacy) {
+        try {
+          const obj = JSON.parse(legacy);
+          localStorage.setItem(NEW_KEY, JSON.stringify(obj));
+          localStorage.removeItem(OLD_KEY);
+          raw = JSON.stringify(obj);
+        } catch {}
+      }
+    }
     if (!raw) return { token: null, user: null };
     const data = JSON.parse(raw);
     return { token: data.token || null, user: data.user || null };
@@ -15,9 +35,9 @@ function loadPersisted() {
 
 function persist(token, user) {
   try {
-    localStorage.setItem("auth", JSON.stringify({ token, user }));
-    if (token) localStorage.setItem("authToken", token);
-    else localStorage.removeItem("authToken");
+    localStorage.setItem(NEW_KEY, JSON.stringify({ token, user }));
+    // cleanup any legacy keys
+    try { localStorage.removeItem(OLD_KEY); } catch {}
   } catch {}
 }
 
@@ -26,14 +46,13 @@ export const useAuthStore = create((set, get) => ({
   loading: false,
   error: null,
 
-  login: async ({ inspectorId, password, otp }) => {
-    if (!base) throw new Error("VITE_API_BASE_URL not set");
+  login: async ({ inspectorId, password }) => {
     set({ loading: true, error: null });
     try {
-      const res = await fetch(base.replace(/\/$/, "") + "/api/auth/login", {
+      const res = await fetch(buildUrl("/api/auth/login"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ inspectorId, password, otp: Number(otp) }),
+        body: JSON.stringify({ inspectorId, password }),
       });
       if (!res.ok) {
         const text = await res.text().catch(() => "");
@@ -56,14 +75,15 @@ export const useAuthStore = create((set, get) => ({
   },
 
   logout: () => {
-    persist(null, null);
-    set({ token: null, user: null });
+    try { localStorage.removeItem(NEW_KEY); } catch {}
+    try { localStorage.removeItem(OLD_KEY); } catch {}
+    set({ token: null, user: null, error: null });
   },
 }));
 
 export function getAuthToken() {
   try {
-    const raw = localStorage.getItem("auth");
+    let raw = localStorage.getItem(NEW_KEY) || localStorage.getItem(OLD_KEY);
     if (!raw) return null;
     const data = JSON.parse(raw);
     return data.token || null;
@@ -71,4 +91,3 @@ export function getAuthToken() {
     return null;
   }
 }
-

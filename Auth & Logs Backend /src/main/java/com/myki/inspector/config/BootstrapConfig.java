@@ -2,7 +2,6 @@ package com.myki.inspector.config;
 
 import com.myki.inspector.entity.Inspector;
 import com.myki.inspector.service.AuthService;
-import com.myki.inspector.service.TotpService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -16,7 +15,6 @@ import org.springframework.context.annotation.Profile;
 public class BootstrapConfig {
 
     private final AuthService authService;
-    private final TotpService totpService;
 
     @Bean
     @Profile({"default","dev"})
@@ -28,10 +26,7 @@ public class BootstrapConfig {
                     "admin@example.com",
                     "ChangeMe123!"
             );
-            String url = totpService.buildOtpAuthURL("Myki Inspector", admin.getInspectorId(), admin.getTotpSecret());
-            log.info("Bootstrap inspector created/ensured. InspectorId=INSPECTOR1 Password=ChangeMe123!");
-            log.info("Enroll 2FA with this URL (QR): {}", url);
+            log.info("Bootstrap inspector created/ensured. InspectorId=INSPECTOR1 Password=ChangeMe123! (OTP disabled)");
         };
     }
 }
-

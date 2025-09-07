@@ -5,7 +5,7 @@ import { useAppStore } from "../store/useAppStore";
 export default function LoginModal() {
   const { token, loading, error, login } = useAuthStore();
   const flushQueue = useAppStore((s) => s.flushQueue);
-  const [form, setForm] = useState({ inspectorId: "", password: "", otp: "" });
+  const [form, setForm] = useState({ inspectorId: "", password: "" });
   const [done, setDone] = useState(false);
 
   if (token) return null;
@@ -14,11 +14,7 @@ export default function LoginModal() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      await login({
-        inspectorId: form.inspectorId.trim(),
-        password: form.password,
-        otp: form.otp,
-      });
+      await login({ inspectorId: form.inspectorId.trim(), password: form.password });
       setDone(true);
       // try flush queued items after successful login
       try { await flushQueue(); } catch {}
@@ -26,7 +22,7 @@ export default function LoginModal() {
   };
 
   return (
-    <div className="absolute inset-0 bg-black/50 grid place-items-center z-50">
+    <div className="absolute inset-0 bg-black/50 grid place-items-center z-[2000]">
       <div className="w-[min(420px,92vw)] rounded-2xl bg-white p-5 shadow-xl">
         <h2 className="text-lg font-semibold mb-3">Sign in</h2>
         <form className="space-y-3" onSubmit={onSubmit}>
@@ -52,17 +48,7 @@ export default function LoginModal() {
               required
             />
           </label>
-          <label className="flex flex-col text-sm">
-            One-time code (OTP)
-            <input
-              className="mt-1 border rounded p-2"
-              type="number"
-              name="otp"
-              value={form.otp}
-              onChange={onChange}
-              required
-            />
-          </label>
+          {/* OTP removed */}
           {error && <div className="text-xs text-red-600">{error}</div>}
           <div className="flex justify-end gap-2 pt-2">
             <button
@@ -79,4 +65,3 @@ export default function LoginModal() {
     </div>
   );
 }
-

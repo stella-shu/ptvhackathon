@@ -3,7 +3,7 @@ Myki Inspector — Auth & Logs Backend
 Overview
 - Java 17 + Spring Boot 3
 - PostgreSQL storage with JPA/Hibernate
-- JWT auth with password + TOTP (Google Authenticator compatible)
+- JWT auth with password (OTP/TOTP removed)
 - Incident and Shift REST APIs (create, update, fetch)
 - Audit trail persisted for key actions
 
@@ -18,7 +18,7 @@ Quick Start
 3) On first boot, a bootstrap inspector is created:
    - Inspector ID: `INSPECTOR1`
    - Password: `ChangeMe123!`
-   - Logs print an `otpauth://` URL for enrolling TOTP in Google Authenticator.
+   - OTP is disabled; sign in using inspectorId + password only.
 
 Docker Postgres
 - Bring up Postgres locally: `docker compose up -d db`
@@ -34,7 +34,7 @@ API Docs (Swagger/OpenAPI)
 - Click “Authorize” and enter `Bearer <JWT>` to try secured endpoints.
 
 Auth
-- POST `/api/auth/login` { inspectorId, password, otp }
+- POST `/api/auth/login` { inspectorId, password }
   - Returns: `{ token, inspectorId, name, email }`
   - Use the `token` as `Authorization: Bearer <token>` for subsequent requests.
 

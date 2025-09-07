@@ -46,7 +46,7 @@ export default function IncidentForm() {
   if (!showIncidentForm) return null;
 
   return (
-    <div className="absolute inset-0 bg-black/40 grid place-items-center">
+    <div className="absolute inset-0 bg-black/40 grid place-items-center z-[2000]">
       <div className="w-[min(520px,92vw)] rounded-2xl bg-white p-5 shadow-xl">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-xl font-semibold">Log Incident</h2>

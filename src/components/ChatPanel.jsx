@@ -120,7 +120,7 @@ export default function ChatPanel() {
   if (!showChat) return null;
 
   return (
-    <div className="absolute bottom-4 left-4 z-50 w-[min(420px,92vw)] bg-white/95 backdrop-blur border rounded-xl shadow-xl flex flex-col max-h-[70vh]">
+    <div className="absolute bottom-4 left-4 z-[1200] w-[min(420px,92vw)] bg-white/95 backdrop-blur border rounded-xl shadow-xl flex flex-col max-h-[70vh]">
       <div className="px-3 py-2 border-b flex items-center gap-2">
         <span className="font-medium">Chat</span>
         <input className="ml-auto border rounded px-2 py-1 text-sm w-32" value={channel} onChange={(e) => setChannel(e.target.value)} />
@@ -157,4 +157,3 @@ function formatTime(iso) {
     return "";
   }
 }
-

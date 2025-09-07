@@ -1,10 +1,12 @@
 // API client. Uses absolute base URL if provided; otherwise, relies on Vite dev proxy.
 const base = import.meta.env.VITE_API_BASE_URL;
+const NEW_KEY = "inspector_auth";
+const OLD_KEY = "auth";
 
 function getHeaders() {
   const headers = { "Content-Type": "application/json" };
   try {
-    const raw = localStorage.getItem("auth");
+    const raw = localStorage.getItem(NEW_KEY) || localStorage.getItem(OLD_KEY);
     if (raw) {
       const { token } = JSON.parse(raw);
       if (token) headers["Authorization"] = `Bearer ${token}`;
@@ -89,7 +91,7 @@ export async function createBlitz({ latitude, longitude, description = "", blitz
   // try read inspectorId from auth store persistence
   let inspectorId = undefined;
   try {
-    const raw = localStorage.getItem("auth");
+    const raw = localStorage.getItem(NEW_KEY) || localStorage.getItem(OLD_KEY);
     if (raw) inspectorId = JSON.parse(raw)?.user?.inspectorId;
   } catch {}
   const body = {

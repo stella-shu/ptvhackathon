@@ -26,7 +26,6 @@ public class AuthController {
         String token = authService.login(
                 request.getInspectorId(),
                 request.getPassword(),
-                request.getOtp(),
                 httpReq.getRemoteAddr(),
                 httpReq.getHeader("User-Agent")
         );

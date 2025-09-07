@@ -8,7 +8,7 @@ export default function QuickActions() {
   } = useAppStore();
 
   return (
-    <div className="absolute bottom-6 right-6 flex gap-3">
+    <div className="absolute bottom-6 right-6 z-[1100] flex gap-3">
       {!shift.active ? (
         <button className="bg-blue-600 text-white px-4 py-2 rounded-full shadow" onClick={startShift}>
           Start Patrol

@@ -17,7 +17,7 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("Inspector Auth & Logs API")
                         .version("v1")
-                        .description("Auth (JWT+TOTP), incidents and shifts APIs"))
+                        .description("Auth (JWT password), incidents and shifts APIs"))
                 .addSecurityItem(new SecurityRequirement().addList(schemeName))
                 .components(new Components().addSecuritySchemes(schemeName,
                         new SecurityScheme()
@@ -27,4 +27,3 @@ public class OpenApiConfig {
                                 .bearerFormat("JWT")));
     }
 }
-

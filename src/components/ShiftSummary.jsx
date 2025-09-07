@@ -13,7 +13,7 @@ export default function ShiftSummary() {
   if (!showSummary) return null;
 
   return (
-    <div className="absolute inset-0 bg-black/40 grid place-items-center">
+    <div className="absolute inset-0 bg-black/40 grid place-items-center z-[2000]">
       <div className="w-[min(520px,92vw)] rounded-2xl bg-white p-5 shadow-xl">
         <h2 className="text-xl font-semibold mb-2">Shift Summary</h2>
         <ul className="space-y-1 text-sm">
