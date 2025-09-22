@@ -1,24 +1,33 @@
-# Logs
-logs
+# --- Node / Frontend ---
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/*.local
+frontend/package-lock.json
+
+# --- Java / Maven (Backend) ---
+backend/**/target/
+*.class
+*.war
+*.ear
+*.jar
+
+# --- Logs ---
+logs/
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+*.out
 
-node_modules
-dist
-dist-ssr
-*.local
+# --- Env Files ---
+.env
+.env.local
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# --- OS / Editor ---
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+Thumbs.db
+.idea/
+.vscode/
+*.iml
+
+# --- Docs ---
+docs/*.pdf
+
