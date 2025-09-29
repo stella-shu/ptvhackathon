@@ -1,12 +1,13 @@
-// src/lib/ws.js
-import { useAppStore } from "../store/useAppStore";
+// src/services/realtime/client.js
+import { serviceOrigins } from "@/config/env";
+import { useAppStore } from "@/stores/appStore";
 
 let client = null;
 
 function wsUrl() {
-  const base = import.meta.env.VITE_API_BASE_URL;
-  if (!base) return "/ws"; // rely on same-origin or dev proxy
-  return base.replace(/\/$/, "") + "/ws";
+  const origin = serviceOrigins.realtime;
+  if (!origin) return "/ws"; // rely on same-origin or dev proxy
+  return `${origin}/ws`;
 }
 
 export async function startRealtime() {
@@ -34,7 +35,9 @@ export async function startRealtime() {
           const existing = s.remotePins || [];
           const next = [...existing, toPin(b)].filter(Boolean);
           s.setRemotePins(next);
-        } catch {}
+        } catch (_error) {
+          // noop: ignore malformed realtime payloads
+        }
       });
 
       // Blitz updated (e.g., closed)
@@ -53,7 +56,9 @@ export async function startRealtime() {
             next = idx >= 0 ? Object.assign([...existing], { [idx]: pin }) : [...existing, pin];
           }
           s.setRemotePins(next);
-        } catch {}
+        } catch (_error) {
+          // noop: ignore malformed realtime payloads
+        }
       });
     };
 
@@ -70,7 +75,11 @@ export function stopRealtime() {
   if (client) {
     const c = client;
     client = null;
-    try { c.deactivate(); } catch {}
+    try {
+      c.deactivate();
+    } catch (_error) {
+      // noop: socket already closed
+    }
   }
 }
 

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useAppStore } from "../store/useAppStore";
+import { useAppStore } from "@/stores/appStore";
 
 export default function ShiftSummary() {
   const { showSummary, setShowSummary, shift, incidents } = useAppStore();

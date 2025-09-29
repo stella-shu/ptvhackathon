@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useAppStore } from "../store/useAppStore";
+import { useAppStore } from "@/stores/appStore";
 
 export default function IncidentForm() {
   const { showIncidentForm, setShowIncidentForm, addIncident } = useAppStore();
@@ -36,7 +36,9 @@ export default function IncidentForm() {
     // Clean up any temporary object URLs if created
     try {
       // no preview URL created; nothing to revoke
-    } catch {}
+    } catch (_error) {
+      // noop: nothing to clean up
+    }
 
     reset();
     setShowIncidentForm(false);

@@ -1,4 +1,4 @@
-import { useAppStore } from "../store/useAppStore";
+import { useAppStore } from "@/stores/appStore";
 
 export default function MapControls() {
   const { showHeatmap, setShowHeatmap, showActive, setShowActive, setShowChat } = useAppStore();

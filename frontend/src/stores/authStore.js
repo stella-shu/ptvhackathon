@@ -1,13 +1,10 @@
 import { create } from "zustand";
-
-const base = import.meta.env.VITE_API_BASE_URL;
+import { urlBuilder } from "@/config/env";
 const NEW_KEY = "inspector_auth";
 const OLD_KEY = "auth";
 
 function buildUrl(path) {
-  const p = path.startsWith("/") ? path : `/${path}`;
-  if (!base) return p; // rely on Vite dev proxy when base not set
-  return base.replace(/\/$/, "") + p;
+  return urlBuilder.auth(path);
 }
 
 function loadPersisted() {
@@ -22,7 +19,9 @@ function loadPersisted() {
           localStorage.setItem(NEW_KEY, JSON.stringify(obj));
           localStorage.removeItem(OLD_KEY);
           raw = JSON.stringify(obj);
-        } catch {}
+        } catch (_error) {
+          // noop: ignore bad legacy payloads
+        }
       }
     }
     if (!raw) return { token: null, user: null };
@@ -37,11 +36,17 @@ function persist(token, user) {
   try {
     localStorage.setItem(NEW_KEY, JSON.stringify({ token, user }));
     // cleanup any legacy keys
-    try { localStorage.removeItem(OLD_KEY); } catch {}
-  } catch {}
+    try {
+      localStorage.removeItem(OLD_KEY);
+    } catch (_error) {
+      // noop: legacy key already removed
+    }
+  } catch (_error) {
+    // noop: best-effort persistence
+  }
 }
 
-export const useAuthStore = create((set, get) => ({
+export const useAuthStore = create((set) => ({
   ...loadPersisted(),
   loading: false,
   error: null,
@@ -75,8 +80,16 @@ export const useAuthStore = create((set, get) => ({
   },
 
   logout: () => {
-    try { localStorage.removeItem(NEW_KEY); } catch {}
-    try { localStorage.removeItem(OLD_KEY); } catch {}
+    try {
+      localStorage.removeItem(NEW_KEY);
+    } catch (_error) {
+      // noop: key already absent
+    }
+    try {
+      localStorage.removeItem(OLD_KEY);
+    } catch (_error) {
+      // noop: key already absent
+    }
     set({ token: null, user: null, error: null });
   },
 }));

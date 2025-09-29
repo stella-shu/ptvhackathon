@@ -1,12 +1,13 @@
 import { create } from "zustand";
 import {
+  createBlitz,
   createIncident,
   createShift,
   updateShift,
   mapIncidentDto,
   mapShiftStartDto,
   mapShiftEndDto,
-} from "../lib/api";
+} from "@/services/api/client";
 
 export const useAppStore = create((set, get) => ({
   showIncidentForm: false,
@@ -62,8 +63,8 @@ export const useAppStore = create((set, get) => ({
       const q = JSON.parse(localStorage.getItem(key) || "[]");
       q.push(item);
       localStorage.setItem(key, JSON.stringify(q));
-    } catch (e) {
-      // ignore quota/JSON errors in this simple client
+    } catch (_error) {
+      // noop: ignore quota/JSON errors in this simple client
     }
   },
   flushQueue: async () => {
@@ -113,7 +114,7 @@ export const useAppStore = create((set, get) => ({
         }
         // unknown item type
         remaining.push(item);
-      } catch (err) {
+      } catch (_error) {
         remaining.push(item);
       }
     }

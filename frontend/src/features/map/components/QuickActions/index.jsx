@@ -1,5 +1,5 @@
-import { useAppStore } from "../store/useAppStore";
-import { createBlitz } from "../lib/api";
+import { useAppStore } from "@/stores/appStore";
+import { createBlitz } from "@/services/api/client";
 
 export default function QuickActions() {
   const {

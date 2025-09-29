@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useAuthStore } from "../store/useAuthStore";
-import { useAppStore } from "../store/useAppStore";
+import { useAuthStore } from "@/stores/authStore";
+import { useAppStore } from "@/stores/appStore";
 
 export default function LoginModal() {
   const { token, loading, error, login } = useAuthStore();
@@ -17,8 +17,14 @@ export default function LoginModal() {
       await login({ inspectorId: form.inspectorId.trim(), password: form.password });
       setDone(true);
       // try flush queued items after successful login
-      try { await flushQueue(); } catch {}
-    } catch {}
+      try {
+        await flushQueue();
+      } catch (_error) {
+        // noop: offline queue will retry later
+      }
+    } catch (_error) {
+      // errors already captured in store; swallow here
+    }
   };
 
   return (

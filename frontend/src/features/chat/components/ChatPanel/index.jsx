@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { useAppStore } from "../store/useAppStore";
-import { useAuthStore } from "../store/useAuthStore";
-import { getClient, startRealtime } from "../lib/ws";
+import { urlBuilder } from "@/config/env";
+import { useAppStore } from "@/stores/appStore";
+import { useAuthStore } from "@/stores/authStore";
+import { getClient, startRealtime } from "@/services/realtime/client";
 
 export default function ChatPanel() {
   const { showChat, setShowChat } = useAppStore();
@@ -23,12 +24,14 @@ export default function ChatPanel() {
     // load history
     (async () => {
       try {
-        const res = await fetch(`/api/channels/${encodeURIComponent(channel)}/messages`);
+        const res = await fetch(urlBuilder.realtime(`/api/channels/${encodeURIComponent(channel)}/messages`));
         if (!res.ok) return;
         const items = await res.json();
         if (!aborted) setMessages(items || []);
         scrollToBottom();
-      } catch {}
+      } catch (_error) {
+        // noop: rely on realtime updates when history fails
+      }
     })();
     // subscribe
     const c = getClient();
@@ -47,7 +50,11 @@ export default function ChatPanel() {
     return () => {
       aborted = true;
       if (subRef.current) {
-        try { subRef.current.unsubscribe(); } catch {}
+        try {
+          subRef.current.unsubscribe();
+        } catch (_error) {
+          // noop: subscription already terminated
+        }
         subRef.current = null;
       }
     };
@@ -56,7 +63,11 @@ export default function ChatPanel() {
 
   const resubscribe = () => {
     if (subRef.current) {
-      try { subRef.current.unsubscribe(); } catch {}
+      try {
+        subRef.current.unsubscribe();
+      } catch (_error) {
+        // noop: subscription already terminated
+      }
       subRef.current = null;
     }
     const c = getClient();
@@ -67,13 +78,17 @@ export default function ChatPanel() {
         destination: `/app/channels/${channel}/join`,
         body: JSON.stringify({ senderId: user?.inspectorId, senderName: user?.name || user?.inspectorId || "Guest" }),
       });
-    } catch {}
+    } catch (_error) {
+      // noop: presence announcement is optional
+    }
     subRef.current = c.subscribe(`/topic/channels/${channel}`, (msg) => {
       try {
         const data = JSON.parse(msg.body);
         setMessages((prev) => [...prev, data]);
         scrollToBottom();
-      } catch {}
+      } catch (_error) {
+        // noop: ignore malformed payloads
+      }
     });
   };
 
@@ -93,11 +108,13 @@ export default function ChatPanel() {
       c.publish({ destination: `/app/channels/${channel}/send`, body: JSON.stringify(payload) });
     } else {
       // fallback REST
-      fetch(`/api/channels/${encodeURIComponent(channel)}/messages`, {
+      fetch(urlBuilder.realtime(`/api/channels/${encodeURIComponent(channel)}/messages`), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
-      }).catch(() => {});
+      }).catch(() => {
+        // noop: request will be replayed from queue
+      });
     }
   };
 
@@ -113,7 +130,9 @@ export default function ChatPanel() {
       try {
         const el = listRef.current;
         if (el) el.scrollTop = el.scrollHeight;
-      } catch {}
+      } catch (_error) {
+        // noop: element may be gone during teardown
+      }
     });
   };
 

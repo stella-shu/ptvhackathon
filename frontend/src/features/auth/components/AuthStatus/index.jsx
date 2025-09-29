@@ -1,4 +1,4 @@
-import { useAuthStore } from "../store/useAuthStore";
+import { useAuthStore } from "@/stores/authStore";
 
 export default function AuthStatus() {
   const { token, user, logout } = useAuthStore();
