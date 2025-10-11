@@ -1,5 +1,6 @@
 import { useAppStore } from "../store/useAppStore";
 import { createBlitz } from "../lib/api";
+import { mergeClasses, pillButton, glassPanel, panelPadding } from "../lib/theme";
 
 export default function QuickActions() {
   const {
@@ -8,19 +9,41 @@ export default function QuickActions() {
   } = useAppStore();
 
   return (
-    <div className="absolute bottom-6 right-6 flex gap-3">
+    <div
+      className={mergeClasses(
+        "absolute bottom-6 right-5 sm:bottom-10 sm:right-10 inline-flex flex-col sm:flex-row gap-3 sm:gap-4 items-end sm:items-center z-40",
+        glassPanel,
+        "rounded-[28px]",
+        panelPadding
+      )}
+    >
       {!shift.active ? (
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-full shadow" onClick={startShift}>
-          Start Patrol
+        <button
+          className={mergeClasses(
+            pillButton,
+            "bg-gradient-to-r from-rose-300 via-amber-200 to-lime-200 text-slate-800"
+          )}
+          onClick={startShift}
+        >
+          🌼 Start Patrol
         </button>
       ) : (
-        <button className="bg-blue-700 text-white px-4 py-2 rounded-full shadow" onClick={endShift}>
-          End Patrol
+        <button
+          className={mergeClasses(
+            pillButton,
+            "bg-gradient-to-r from-sky-200 via-indigo-200 to-purple-200 text-slate-800"
+          )}
+          onClick={endShift}
+        >
+          🌙 End Patrol
         </button>
       )}
 
       <button
-        className="bg-green-600 text-white px-4 py-2 rounded-full shadow"
+        className={mergeClasses(
+          pillButton,
+          "bg-gradient-to-r from-emerald-200 via-teal-200 to-cyan-200 text-slate-800"
+        )}
         onClick={async () => {
           const lat = -37.8136, lng = 144.9631;
           addPin({ type: "blitz", lat, lng });
@@ -32,23 +55,29 @@ export default function QuickActions() {
           }
         }}
       >
-        Mark Blitz
+        ⚡ Mark Blitz
       </button>
 
       <button
-        className="bg-slate-700 text-white px-4 py-2 rounded-full shadow"
+        className={mergeClasses(
+          pillButton,
+          "bg-gradient-to-r from-amber-200 via-rose-200 to-pink-200 text-slate-800"
+        )}
         onClick={() => setDropPinMode(true)}
       >
-        Drop Pin
+        📍 Drop Pin
       </button>
 
       <button
-        className="bg-amber-600 text-white px-4 py-2 rounded-full shadow"
+        className={mergeClasses(
+          pillButton,
+          "bg-gradient-to-r from-fuchsia-200 via-rose-300 to-amber-200 text-slate-800 disabled:opacity-60"
+        )}
         onClick={() => setShowIncidentForm(true)}
         disabled={!shift.active}
         title={!shift.active ? "Start patrol to log incidents" : ""}
       >
-        Log Incident
+        📝 Log Incident
       </button>
     </div>
   );

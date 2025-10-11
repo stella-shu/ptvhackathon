@@ -5,7 +5,11 @@ import com.google.maps.GeocodingApi;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -14,6 +18,9 @@ public class MapsService {
 
     @Autowired(required = false) // Optional since it depends on API key being set
     private GeoApiContext geoApiContext;
+
+    @Value("${google.maps.browser-api-key:}")
+    private String browserApiKey;
 
     public Optional<LatLng> geocodeAddress(String address) {
         if (geoApiContext == null) {
@@ -49,11 +56,14 @@ public class MapsService {
     }
 
     public Map<String, Object> getMapConfig() {
-        return Map.of(
-                "center", Map.of("lat", -37.8136, "lng", 144.9631), // Melbourne CBD
-                "zoom", 13,
-                "mapType", "roadmap",
-                "apiAvailable", geoApiContext != null
-        );
+        Map<String, Object> config = new HashMap<>();
+        config.put("center", Map.of("lat", -37.8136, "lng", 144.9631)); // Melbourne CBD
+        config.put("zoom", 13);
+        config.put("mapType", "roadmap");
+        config.put("apiAvailable", geoApiContext != null);
+        if (StringUtils.hasText(browserApiKey)) {
+            config.put("apiKey", browserApiKey.trim());
+        }
+        return config;
     }
 }

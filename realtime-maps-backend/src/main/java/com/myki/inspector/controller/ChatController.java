@@ -2,6 +2,7 @@ package com.myki.inspector.controller;
 
 import com.myki.inspector.dto.ChatMessageDto;
 import com.myki.inspector.service.ChatService;
+import jakarta.validation.Valid;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -61,7 +62,7 @@ class ChatRestController {
     // POST /api/channels/{channelId}/messages (alternative to WebSocket)
     @PostMapping("/{channelId}/messages")
     public ChatMessageDto sendMessageRest(@PathVariable String channelId,
-                                          @RequestBody ChatMessageDto message) {
+                                          @Valid @RequestBody ChatMessageDto message) {
         message.setChannelId(channelId);
         return chatService.sendMessage(message);
     }

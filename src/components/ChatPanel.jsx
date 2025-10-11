@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useAppStore } from "../store/useAppStore";
 import { useAuthStore } from "../store/useAuthStore";
 import { getClient, startRealtime } from "../lib/ws";
+import { glassPanel, mergeClasses, softInput, pillButton } from "../lib/theme";
 
 export default function ChatPanel() {
   const { showChat, setShowChat } = useAppStore();
@@ -120,29 +121,63 @@ export default function ChatPanel() {
   if (!showChat) return null;
 
   return (
-    <div className="absolute bottom-4 left-4 z-50 w-[min(420px,92vw)] bg-white/95 backdrop-blur border rounded-xl shadow-xl flex flex-col max-h-[70vh]">
-      <div className="px-3 py-2 border-b flex items-center gap-2">
-        <span className="font-medium">Chat</span>
-        <input className="ml-auto border rounded px-2 py-1 text-sm w-32" value={channel} onChange={(e) => setChannel(e.target.value)} />
-        <button className="text-slate-600" onClick={() => setShowChat(false)}>✕</button>
+    <div
+      className={mergeClasses(
+        "absolute bottom-6 left-5 sm:bottom-10 sm:left-10 z-50 flex max-h-[70vh] w-[min(420px,92vw)] flex-col",
+        glassPanel,
+        "rounded-[28px] overflow-hidden"
+      )}
+    >
+      <div className="flex items-center gap-2 border-b border-white/60 bg-white/60 px-4 py-3 text-sm font-semibold text-slate-600">
+        <span>Team Chat</span>
+        <input
+          className={mergeClasses(softInput, "ml-auto w-28")}
+          value={channel}
+          onChange={(e) => setChannel(e.target.value)}
+        />
+        <button
+          className="rounded-full bg-white/80 px-2 py-1 text-xs text-slate-400 transition hover:text-slate-600"
+          onClick={() => setShowChat(false)}
+        >
+          ✕
+        </button>
       </div>
-      <div ref={listRef} className="px-3 py-2 overflow-auto flex-1 space-y-1">
+      <div ref={listRef} className="flex-1 space-y-2 overflow-auto px-4 py-3 text-sm">
+        {messages.length === 0 && (
+          <div className="rounded-3xl bg-white/70 px-4 py-3 text-center text-xs font-medium text-slate-400 shadow-inner shadow-rose-100/40">
+            No messages yet — say hi! ✨
+          </div>
+        )}
         {messages.map((m, i) => (
-          <div key={m.id || i} className="text-sm">
-            <span className="text-slate-500">[{formatTime(m.createdAt)}]</span>{" "}
-            <span className="font-medium">{m.senderName || m.senderId}</span>: {m.content}
+          <div
+            key={m.id || i}
+            className="rounded-3xl bg-white/70 px-3 py-2 shadow-inner shadow-rose-100/40"
+          >
+            <span className="text-[11px] uppercase tracking-wide text-slate-400">
+              {formatTime(m.createdAt)}
+            </span>
+            <div className="font-semibold text-slate-700">{m.senderName || m.senderId}</div>
+            <p className="text-slate-600 whitespace-pre-wrap">{m.content}</p>
           </div>
         ))}
       </div>
-      <div className="p-2 border-t flex gap-2">
+      <div className="flex items-end gap-2 border-t border-white/60 bg-white/55 px-4 py-3">
         <textarea
-          className="flex-1 border rounded px-2 py-1 text-sm resize-none h-[40px]"
-          placeholder="Message..."
+          className={mergeClasses(softInput, "flex-1 h-[60px] resize-none")}
+          placeholder="Send a little hello…"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={onKey}
         />
-        <button className="px-3 py-1 bg-blue-600 text-white rounded" onClick={send}>Send</button>
+        <button
+          className={mergeClasses(
+            pillButton,
+            "bg-gradient-to-r from-sky-200 via-indigo-200 to-rose-200 text-slate-800"
+          )}
+          onClick={send}
+        >
+          Send
+        </button>
       </div>
     </div>
   );
@@ -157,4 +192,3 @@ function formatTime(iso) {
     return "";
   }
 }
-

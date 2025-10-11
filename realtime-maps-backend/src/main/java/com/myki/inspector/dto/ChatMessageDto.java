@@ -1,15 +1,32 @@
 package com.myki.inspector.dto;
 
 import com.myki.inspector.entity.ChatMessage;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 import java.time.Instant;
 
 public class ChatMessageDto {
     private Long id;                 // message id (for UI keys)
+    @NotBlank
+    @Size(max = 120)
     private String channelId;
+    @NotBlank
+    @Size(max = 64)
     private String senderId;
+    @NotBlank
+    @Size(max = 120)
     private String senderName;
+    @NotBlank
+    @Size(max = 2000)
     private String content;
+    @DecimalMin(value = "-90.0", message = "pinLat must be >= -90")
+    @DecimalMax(value = "90.0", message = "pinLat must be <= 90")
     private Double pinLat;
+    @DecimalMin(value = "-180.0", message = "pinLon must be >= -180")
+    @DecimalMax(value = "180.0", message = "pinLon must be <= 180")
     private Double pinLon;
     private ChatMessage.MessageType type = ChatMessage.MessageType.CHAT;
     private Instant ts = Instant.now(); // server timestamp

@@ -17,7 +17,9 @@ Create `.env.local` and set:
 
 `VITE_GOOGLE_MAPS_API_KEY=your_key_here`
 
-Without a valid key, the map will not load and a loading notice will remain on screen.
+Alternatively, let the backend provide the key by exporting `GOOGLE_MAPS_BROWSER_API_KEY` (or setting `google.maps.browser-api-key` in the Spring config) before starting `realtime-maps-backend`; the frontend will auto-detect it via `/api/maps/config`.
+
+Without a valid key from either source, the map will not load and a notice will remain on screen.
 
 ## Backend API (optional)
 
@@ -44,6 +46,12 @@ The PWA layer is disabled by default during builds to avoid CI/sandbox issues.
 To enable PWA generation, run:
 
 `BUILD_PWA=true npm run build`
+
+## Documentation
+
+- Product requirements: `docs/product-requirements.md`
+- Technical analysis & architecture notes: `docs/technical-analysis.md`
+- User guide & UX backlog: `docs/user-guide.md`
 
 ---
 

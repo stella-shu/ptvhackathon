@@ -2,7 +2,9 @@ package com.myki.inspector.controller;
 
 import com.myki.inspector.dto.BlitzMarkerDto;
 import com.myki.inspector.service.BlitzService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -13,7 +15,7 @@ public class BlitzController {
     public BlitzController(BlitzService service) { this.service = service; }
 
     @PostMapping
-    public BlitzMarkerDto create(@RequestBody BlitzMarkerDto dto) {
+    public BlitzMarkerDto create(@Valid @RequestBody BlitzMarkerDto dto) {
         return service.create(dto);
     }
 

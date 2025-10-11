@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { useAppStore } from "../store/useAppStore";
+import { glassPanel, panelPadding, pillButton, mergeClasses } from "../lib/theme";
 
 export default function ShiftSummary() {
   const { showSummary, setShowSummary, shift, incidents } = useAppStore();
@@ -13,15 +14,29 @@ export default function ShiftSummary() {
   if (!showSummary) return null;
 
   return (
-    <div className="absolute inset-0 bg-black/40 grid place-items-center">
-      <div className="w-[min(520px,92vw)] rounded-2xl bg-white p-5 shadow-xl">
-        <h2 className="text-xl font-semibold mb-2">Shift Summary</h2>
-        <ul className="space-y-1 text-sm">
-          <li><span className="font-medium">Hours patrolled:</span> {stats.hours} h</li>
-          <li><span className="font-medium">Incidents logged:</span> {stats.incidentCount}</li>
+    <div className="absolute inset-0 z-50 grid place-items-center bg-slate-900/30 backdrop-blur-md px-4">
+      <div className={mergeClasses("w-[min(480px,95vw)] rounded-[32px]", glassPanel, panelPadding)}>
+        <h2 className="text-2xl font-bold text-slate-800 mb-3">Shift complete! 🎉</h2>
+        <ul className="space-y-2 text-sm text-slate-600">
+          <li className="flex items-center justify-between rounded-3xl bg-white/70 px-4 py-3 shadow-inner shadow-rose-100/50">
+            <span className="font-semibold">Hours patrolled</span>
+            <span className="text-lg text-slate-800">{stats.hours} h</span>
+          </li>
+          <li className="flex items-center justify-between rounded-3xl bg-white/70 px-4 py-3 shadow-inner shadow-rose-100/50">
+            <span className="font-semibold">Incidents logged</span>
+            <span className="text-lg text-slate-800">{stats.incidentCount}</span>
+          </li>
         </ul>
-        <div className="flex justify-end pt-4">
-          <button className="px-4 py-2 rounded bg-blue-600 text-white" onClick={() => setShowSummary(false)}>Close</button>
+        <div className="flex justify-end pt-5">
+          <button
+            className={mergeClasses(
+              pillButton,
+              "bg-gradient-to-r from-sky-200 via-indigo-200 to-rose-200 text-slate-800"
+            )}
+            onClick={() => setShowSummary(false)}
+          >
+            Ready for next shift
+          </button>
         </div>
       </div>
     </div>

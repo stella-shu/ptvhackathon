@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useAppStore } from "../store/useAppStore";
+import { glassPanel, mergeClasses, panelPadding, softInput, pillButton } from "../lib/theme";
 
 export default function LoginModal() {
   const { token, loading, error, login } = useAuthStore();
@@ -26,14 +27,15 @@ export default function LoginModal() {
   };
 
   return (
-    <div className="absolute inset-0 bg-black/50 grid place-items-center z-50">
-      <div className="w-[min(420px,92vw)] rounded-2xl bg-white p-5 shadow-xl">
-        <h2 className="text-lg font-semibold mb-3">Sign in</h2>
-        <form className="space-y-3" onSubmit={onSubmit}>
-          <label className="flex flex-col text-sm">
+    <div className="absolute inset-0 z-50 grid place-items-center bg-slate-900/45 backdrop-blur-sm px-4">
+      <div className={mergeClasses("w-[min(420px,94vw)] rounded-[32px]", glassPanel, panelPadding)}>
+        <h2 className="text-2xl font-bold text-slate-800 mb-2">Welcome back, inspector!</h2>
+        <p className="text-sm text-slate-500 mb-5">Log in to sync your patrol adventures and collaborate with your team.</p>
+        <form className="space-y-4" onSubmit={onSubmit}>
+          <label className="flex flex-col text-sm font-medium text-slate-600">
             Inspector ID
             <input
-              className="mt-1 border rounded p-2"
+              className={softInput}
               name="inspectorId"
               value={form.inspectorId}
               onChange={onChange}
@@ -41,10 +43,10 @@ export default function LoginModal() {
               required
             />
           </label>
-          <label className="flex flex-col text-sm">
+          <label className="flex flex-col text-sm font-medium text-slate-600">
             Password
             <input
-              className="mt-1 border rounded p-2"
+              className={softInput}
               type="password"
               name="password"
               value={form.password}
@@ -52,10 +54,10 @@ export default function LoginModal() {
               required
             />
           </label>
-          <label className="flex flex-col text-sm">
+          <label className="flex flex-col text-sm font-medium text-slate-600">
             One-time code (OTP)
             <input
-              className="mt-1 border rounded p-2"
+              className={softInput}
               type="number"
               name="otp"
               value={form.otp}
@@ -63,15 +65,22 @@ export default function LoginModal() {
               required
             />
           </label>
-          {error && <div className="text-xs text-red-600">{error}</div>}
-          <div className="flex justify-end gap-2 pt-2">
+          {error && (
+            <div className="rounded-2xl bg-rose-100/80 px-3 py-2 text-xs text-rose-600 shadow-inner shadow-rose-200/60">
+              {error}
+            </div>
+          )}
+          <div className="flex justify-end gap-3 pt-2">
             <button
               type="submit"
-              className="px-4 py-2 rounded bg-blue-600 text-white disabled:opacity-60"
+              className={mergeClasses(
+                pillButton,
+                "bg-gradient-to-r from-rose-300 via-amber-200 to-sky-200 text-slate-800 disabled:opacity-60"
+              )}
               disabled={loading}
               title={done ? "Signed in" : undefined}
             >
-              {loading ? "Signing in..." : done ? "Signed in" : "Sign in"}
+              {loading ? "Signing in…" : done ? "Signed in ✨" : "Sign in"}
             </button>
           </div>
         </form>
@@ -79,4 +88,3 @@ export default function LoginModal() {
     </div>
   );
 }
-

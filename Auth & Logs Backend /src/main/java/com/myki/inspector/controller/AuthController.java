@@ -2,8 +2,6 @@ package com.myki.inspector.controller;
 
 import com.myki.inspector.dto.LoginRequest;
 import com.myki.inspector.dto.LoginResponse;
-import com.myki.inspector.entity.Inspector;
-import com.myki.inspector.repository.InspectorRepository;
 import com.myki.inspector.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -19,19 +17,17 @@ import java.util.Map;
 public class AuthController {
 
     private final AuthService authService;
-    private final InspectorRepository inspectorRepository;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request, HttpServletRequest httpReq) {
-        String token = authService.login(
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request, HttpServletRequest httpReq) {
+        LoginResponse response = authService.login(
                 request.getInspectorId(),
                 request.getPassword(),
                 request.getOtp(),
                 httpReq.getRemoteAddr(),
                 httpReq.getHeader("User-Agent")
         );
-        Inspector inspector = inspectorRepository.findByInspectorId(request.getInspectorId()).orElse(null);
-        return ResponseEntity.ok(new LoginResponse(token, inspector.getInspectorId(), inspector.getName(), inspector.getEmail()));
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/bootstrap-info")

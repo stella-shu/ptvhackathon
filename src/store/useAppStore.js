@@ -3,6 +3,7 @@ import {
   createIncident,
   createShift,
   updateShift,
+  createBlitz,
   mapIncidentDto,
   mapShiftStartDto,
   mapShiftEndDto,

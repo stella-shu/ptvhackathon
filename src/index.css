@@ -1,6 +1,28 @@
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
 
 /* Make Tailwind sizing work full-viewport */
 html, body, #root {
   height: 100%;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  body {
+    @apply bg-rose-50 text-slate-700;
+    font-family: "Nunito", "Segoe UI", system-ui, -apple-system, sans-serif;
+    background-image:
+      radial-gradient(circle at 5% 10%, rgba(255, 218, 185, 0.5), transparent 55%),
+      radial-gradient(circle at 95% 15%, rgba(208, 237, 255, 0.6), transparent 50%),
+      radial-gradient(circle at 10% 80%, rgba(255, 194, 235, 0.45), transparent 45%),
+      linear-gradient(135deg, #fef3f7 0%, #f8fafc 100%);
+  }
+
+  ::selection {
+    color: #fff;
+    background: #f472b6;
+  }
 }

@@ -1,15 +1,35 @@
 package com.myki.inspector.dto;
 
 import com.myki.inspector.entity.BlitzMarker;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 import java.time.Instant;
 
 public class BlitzMarkerDto {
     private Long id;
+    @NotBlank
     private String inspectorId;
+
     private String inspectorName;  // optional display name
+
+    @NotNull
+    @DecimalMin(value = "-90.0", message = "latitude must be >= -90")
+    @DecimalMax(value = "90.0", message = "latitude must be <= 90")
     private Double latitude;
+
+    @NotNull
+    @DecimalMin(value = "-180.0", message = "longitude must be >= -180")
+    @DecimalMax(value = "180.0", message = "longitude must be <= 180")
     private Double longitude;
+
+    @Size(max = 500)
     private String description;
+
+    @Size(max = 64)
     private String blitzType;
     private boolean active = true;
     private Instant createdAt;

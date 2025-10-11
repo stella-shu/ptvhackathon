@@ -28,11 +28,39 @@ public class LocationService {
     /** Create & broadcast a new location update. Also clears caches. */
     @CacheEvict(value = { "activeLocations", "heatmapData" }, allEntries = true)
     public LocationUpdateDto updateLocation(LocationUpdateDto in) {
+        if (in == null) {
+            throw new IllegalArgumentException("Payload is required");
+        }
+
+        String inspectorId = Optional.ofNullable(in.getInspectorId())
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .orElseThrow(() -> new IllegalArgumentException("inspectorId is required"));
+
+        Double latRaw = in.getLatitude();
+        Double lngRaw = in.getLongitude();
+        if (latRaw == null || lngRaw == null) {
+            throw new IllegalArgumentException("latitude and longitude are required");
+        }
+        double lat = latRaw;
+        double lng = lngRaw;
+        if (!Double.isFinite(lat) || lat < -90 || lat > 90) {
+            throw new IllegalArgumentException("latitude must be between -90 and 90");
+        }
+        if (!Double.isFinite(lng) || lng < -180 || lng > 180) {
+            throw new IllegalArgumentException("longitude must be between -180 and 180");
+        }
+
+        Double accuracy = in.getAccuracy();
+        if (accuracy != null && (accuracy < 0 || !Double.isFinite(accuracy))) {
+            accuracy = null;
+        }
+
         LocationUpdate l = new LocationUpdate();
-        l.setInspectorId(in.getInspectorId());
-        l.setLatitude(in.getLatitude());
-        l.setLongitude(in.getLongitude());
-        l.setAccuracy(in.getAccuracy());
+        l.setInspectorId(inspectorId);
+        l.setLatitude(lat);
+        l.setLongitude(lng);
+        l.setAccuracy(accuracy);
         l.setActive(in.isActive());
 
         LocationUpdate saved = locationRepository.save(l);

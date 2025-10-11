@@ -3,6 +3,7 @@ package com.myki.inspector.controller;
 import com.myki.inspector.dto.LocationUpdateDto;
 import com.myki.inspector.service.LocationService;
 import com.myki.inspector.service.HotspotService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,13 +25,9 @@ class LocationRestController {
     }
 
     @PostMapping("/update")
-    public ResponseEntity<LocationUpdateDto> update(@RequestBody LocationUpdateDto body) {
-        try {
-            LocationUpdateDto result = locationService.updateLocation(body);
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<LocationUpdateDto> update(@Valid @RequestBody LocationUpdateDto body) {
+        LocationUpdateDto result = locationService.updateLocation(body);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/active")

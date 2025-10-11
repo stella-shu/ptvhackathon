@@ -1,14 +1,27 @@
 package com.myki.inspector.dto;
 
 import com.myki.inspector.entity.LocationUpdate;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.Instant;
 
 public class LocationUpdateDto {
     private Long id;
+    @NotBlank
     private String inspectorId;
     private String inspectorName; // For display purposes
-    private double latitude;
-    private double longitude;
+    @NotNull
+    @DecimalMin(value = "-90.0", message = "latitude must be >= -90")
+    @DecimalMax(value = "90.0", message = "latitude must be <= 90")
+    private Double latitude;
+
+    @NotNull
+    @DecimalMin(value = "-180.0", message = "longitude must be >= -180")
+    @DecimalMax(value = "180.0", message = "longitude must be <= 180")
+    private Double longitude;
     private Double accuracy;
     private boolean active;
     private Instant createdAt;
@@ -42,11 +55,11 @@ public class LocationUpdateDto {
     public String getInspectorName() { return inspectorName; }
     public void setInspectorName(String inspectorName) { this.inspectorName = inspectorName; }
 
-    public double getLatitude() { return latitude; }
-    public void setLatitude(double latitude) { this.latitude = latitude; }
+    public Double getLatitude() { return latitude; }
+    public void setLatitude(Double latitude) { this.latitude = latitude; }
 
-    public double getLongitude() { return longitude; }
-    public void setLongitude(double longitude) { this.longitude = longitude; }
+    public Double getLongitude() { return longitude; }
+    public void setLongitude(Double longitude) { this.longitude = longitude; }
 
     public Double getAccuracy() { return accuracy; }
     public void setAccuracy(Double accuracy) { this.accuracy = accuracy; }

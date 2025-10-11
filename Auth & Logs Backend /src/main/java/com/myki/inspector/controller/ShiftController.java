@@ -33,7 +33,7 @@ public class ShiftController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Shift> update(@PathVariable UUID id, @RequestBody ShiftDto body) {
+    public ResponseEntity<Shift> update(@PathVariable UUID id, @Valid @RequestBody ShiftDto body) {
         String inspectorId = SecurityUtils.currentInspectorId();
         Shift update = new Shift();
         update.setStartTime(body.getStartTime());
@@ -57,4 +57,3 @@ public class ShiftController {
         return shiftService.get(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 }
-

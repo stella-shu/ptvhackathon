@@ -35,7 +35,7 @@ public class IncidentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Incident> update(@PathVariable UUID id, @RequestBody IncidentDto body) {
+    public ResponseEntity<Incident> update(@PathVariable UUID id, @Valid @RequestBody IncidentDto body) {
         String inspectorId = SecurityUtils.currentInspectorId();
         Incident update = new Incident();
         update.setTitle(body.getTitle());
@@ -61,4 +61,3 @@ public class IncidentController {
         return incidentService.get(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 }
-
